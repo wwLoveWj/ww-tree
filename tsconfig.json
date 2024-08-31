@@ -3,13 +3,20 @@
     "target": "es5",
     "module": "commonjs",
     "jsx": "react",
+    "declaration": true,
     "outDir": "./dist",
+    "declarationDir": "./dist/types",
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
     "types": ["node", "css-modules"] // 添加 css-modules 类型定义
   },
-  "include": ["./src/**/*.tsx"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.d.ts", // 确保 d.ts 文件被包含
+    "*.d.ts"
+  ],
   "exclude": ["node_modules"]
 }

@@ -1,3 +1,3 @@
-import WjTree from "./components/Tree";
+// import WjTree from "./components/Tree";
 
-export { WjTree };
+export { default as WjTree } from "./components/Tree";

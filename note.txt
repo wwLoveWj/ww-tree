@@ -1,0 +1,4 @@
+"build": "babel src -d lib"  // 编译 src 目录下的 js 文件，并输出到 lib 目录下
+npm cache clean --force
+registry.npmmirror.com
+npm version patch  //更新npm包版本

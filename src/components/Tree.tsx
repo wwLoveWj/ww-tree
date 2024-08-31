@@ -1,6 +1,20 @@
 import React, { memo, useState, useEffect, useRef } from "react";
-import { Tree as AntdTree, TreeProps, Spin, Empty, Col, Input } from "antd";
-import styles from "./tree.less";
+import {
+  Tree as AntdTree,
+  TreeProps,
+  Spin,
+  Empty,
+  Col,
+  Input,
+  Space,
+  Dropdown,
+  TreeDataNode,
+  Tooltip,
+} from "antd";
+import { EllipsisOutlined } from "@ant-design/icons";
+import classNames from "classnames";
+// import styles from "./style.less";
+import "./style.less";
 
 interface CustomTreeProps extends TreeProps {
   placeholder: string;
@@ -10,12 +24,21 @@ interface CustomTreeProps extends TreeProps {
   loadingTree: boolean;
   isAutoExpandParent: boolean;
   treeSourceData: any;
-  fieldNames: any;
+  fieldNames: {
+    key: string;
+    title: string;
+    children: string;
+  };
   updateTreeSelectVal: (param: string) => void;
   treeKey: string;
   expandedKeysFromOutSide: string[];
   heightFromOutSide: number;
   selectedKeys: any;
+  actions: {
+    add: string;
+  };
+  operationItems: (node: any) => React.ReactNode;
+  className: string;
 }
 
 const { Search } = Input;
@@ -27,16 +50,20 @@ const WwTree: React.FC<CustomTreeProps> = ({
   loadingTree = false,
   treeSourceData,
   fieldNames = {
-    key: "orgId",
-    title: "orgName",
-    children: "organization",
+    key: "key",
+    title: "title",
+    children: "children",
   },
+  // fieldNames,
   updateTreeSelectVal,
   treeKey = "orgId",
   isAutoExpandParent,
   expandedKeysFromOutSide,
   heightFromOutSide,
   selectedKeys,
+  actions = { add: "子组织" },
+  operationItems,
+  className,
   ...props
 }) => {
   const [treeData, setTreeData] = useState<any[]>([]); //copy一份树形数据TODO:
@@ -126,7 +153,9 @@ const WwTree: React.FC<CustomTreeProps> = ({
 
   //  点击树选中数据后的操作  将选中值抛出去
   const handelSelect: TreeProps["onSelect"] = (selectedArr, { selected }) => {
-    updateTreeSelectVal(selected ? selectedArr[0] + "" : "");
+    updateTreeSelectVal &&
+      updateTreeSelectVal(selected ? selectedArr[0] + "" : "");
+    setSelectId(selectedArr[0] + "");
   };
 
   // 树的展开收起
@@ -167,10 +196,114 @@ const WwTree: React.FC<CustomTreeProps> = ({
   useEffect(() => {
     setExpandedKeys([expandedKeysFromOutSide]);
   }, [expandedKeysFromOutSide]);
+
+  // ==================================================自定义树节点==============================================================
+  const [treeEditStatusKey, setTreeEditStatusKey] = useState<string | null>();
+  const [selectId, setSelectId] = useState<string | null>();
+  const [open, setOpen] = useState(false);
+
+  const handleOpenChange = (flag: boolean) => {
+    setOpen(flag);
+  };
+  // 一些操作项
+  // const operationItems = (nodeVal: {
+  //   orgId: string;
+  //   orgName: string;
+  // }): React.ReactNode => (
+  //   <div>
+  //     <p
+  //     // 这里需要自己定义点击事件，打开弹窗进行编辑等等
+  //     // onClick={() =>
+  //     //   // openModal({
+  //     //   //   title: '新增子组织',
+  //     //   //   action: 'A',
+  //     //   //   userType,
+  //     //   //   record: {
+  //     //   //     tenantId: formRef?.current?.getFieldValue('tenantId'),
+  //     //   //     orgId: nodeVal?.orgId,
+  //     //   //   },
+  //     //   // })
+  //     // }
+  //     >
+  //       新增{actions["add"]}
+  //     </p>
+  //   </div>
+  // );
+  // 树形控件的自定义render
+  const renderTitle = (
+    node: TreeDataNode & {
+      orgName: string;
+      orgId: string;
+    }
+    // isShowOperation: boolean //也可以放在外部props控制，是否展示最右边...操作的判断
+  ): React.ReactNode => {
+    // 是否展示最右边...操作的判断
+    // const isHovered = node.orgId === treeEditStatusKey;
+    // 文字超出一定宽度展示...
+    // const regionWidth = getTextWidth(node.orgName, '14px');
+    return (
+      <div
+        // className={styles.treeSpan}
+        style={
+          selectId && selectId === (node as any)[fieldNames.key]
+            ? {
+                color: "#1890ff",
+                display: "flex",
+                justifyContent: "space-between",
+                // background: "yellow",
+                // borderRadius: "5px",
+                // padding: "0 6px",
+              }
+            : {}
+        }
+        onMouseEnter={() => {
+          setTreeEditStatusKey((node as any)[fieldNames.key]);
+        }}
+        onClick={(e) => {
+          setTreeEditStatusKey((node as any)[fieldNames.key]);
+        }}
+        onMouseLeave={() => {
+          setTreeEditStatusKey(null);
+        }}
+      >
+        <Tooltip title={(node as any)[fieldNames.title]}>
+          <div
+          // className={styles.treeSpan}
+          // className="treeSpan"
+          >
+            {(node as any)[fieldNames.title]}
+          </div>
+        </Tooltip>
+        {selectId === (node as any)[fieldNames.key] && (
+          <>
+            <div>
+              <Space>
+                <Dropdown
+                  dropdownRender={operationItems}
+                  trigger={["hover", "click"]}
+                  autoFocus={true}
+                  open={open}
+                  onOpenChange={handleOpenChange}
+                >
+                  <a onClick={(e) => e.stopPropagation()}>
+                    <Space style={{ marginLeft: "30px" }}>
+                      <EllipsisOutlined />
+                    </Space>
+                  </a>
+                </Dropdown>
+              </Space>
+            </div>
+          </>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div
       ref={treeBoxDom}
-      className={styles.treeBox}
+      // className={styles.treeBox}
+      className={classNames("treeBox", className)}
       style={{ height: heightFromOutSide }}
     >
       <Spin spinning={loadingTree}>
@@ -188,15 +321,23 @@ const WwTree: React.FC<CustomTreeProps> = ({
             showLine={showLine}
             showIcon={showIcon}
             blockNode
-            // titleRender={(nodeData) => {
-            //   return renderTitle(
-            //     nodeData,
-            //     !isFromTenant && treeEditStatusKey === nodeData.orgId
-            //   );
-            // }}
-            // filterTreeNode={(node: { orgId: string }) =>
-            //   node?.orgId === treeEditStatusKey
-            // }
+            titleRender={(
+              nodeData: TreeDataNode & {
+                orgName: string;
+                orgId: string;
+              }
+            ) => {
+              return renderTitle(
+                nodeData
+                // treeEditStatusKey === nodeData.orgId
+              );
+            }}
+            filterTreeNode={(
+              node: TreeDataNode & {
+                orgName: string;
+                orgId: string;
+              }
+            ) => node?.orgId === treeEditStatusKey}
             treeData={filteredData}
             // height={treeHeight - treeHeightProp}
             onExpand={onExpand}

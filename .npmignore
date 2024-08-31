@@ -1,0 +1,9 @@
+# .npmignore示例
+# src/
+public/
+*.md
+*.log
+*.json
+dist/
+webpack.config.js
+.babelrc
