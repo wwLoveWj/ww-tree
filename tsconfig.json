@@ -1,22 +1,32 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "jsx": "react",
+    "target": "esnext", //指定 ECMAScript 目标版本。例如 "es5"、"es6" 或 "esnext"。这会影响编译后的 JavaScript 代码的语法
+    "module": "esnext", //指定模块代码生成。例如 "commonjs" 对于 Node.js，或者是 "amd" 对于 RequireJS。
+    //esnextES 模块（ECMAScript Modules，简称 ESM）是一种在现代浏览器和 Node.js 中使用模块的方式，它使用 import 和 export 语句来导入和导出模块。
+    "allowJs": false, //允许编译 JavaScript 文件。默认情况下，TypeScript 只编译 .ts 文件，但如果设置此选项为 true，则也会编译 .js 文件。
+    "checkJs": null, //启用 JavaScript 文件的类型检查。这会为 .js 文件提供一些类型检查，即使它们没有 .d.ts 文件。
+    "jsx": "react", //指定 JSX 代码的处理方式。例如 "preserve" 保留 JSX 代码，"react" 将 JSX 转换为 React 兼容的代码。
     "declaration": true,
-    "outDir": "./dist",
     "declarationDir": "./dist/types",
-    "strict": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "sourceMap": true, //生成 .map 文件，这样就可以在浏览器开发者工具中查看原始的 TypeScript 代码。
+    "strict": true, //启用所有严格类型检查选项。这是一个方便的选项，因为它启用了多个相关的严格模式标志，比如 noImplicitAny、alwaysStrict 等。
+    "esModuleInterop": true, //启用 ES 模块互操作性功能，允许默认导入非 ES 模块。
+    "forceConsistentCasingInFileNames": true, //强制检查文件名的大小写一致性。这对于 Windows 系统上的项目尤其有用，因为 Windows 文件系统是大小写不敏感的。
     "moduleResolution": "node",
+    "noImplicitAny": true, //在表达式和声明上有隐含的 any 类型时发出错误。
+    "strictNullChecks": true, //启用严格的 null 和 undefined 类型检查。
+    "skipLibCheck": true, //跳过类型库（.d.ts 文件）的类型检查。
+    // "noEmitOnError": true, //如果有错误，就不生成输出文件
+    "lib": ["esnext", "dom"],
     "types": ["node", "css-modules"] // 添加 css-modules 类型定义
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.d.ts", // 确保 d.ts 文件被包含
-    "*.d.ts"
+    "*.d.ts",
+    "public/**/*.tsx"
   ],
   "exclude": ["node_modules"]
 }

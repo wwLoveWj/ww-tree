@@ -10,14 +10,16 @@ const htmlWebpackPlugin = new HtmlWebpackPlugin({
 });
 
 module.exports = {
-  mode: "development", //这个值有3种：production、development、none
-  entry: path.join(__dirname, "./src/index.js"),
+  // mode: "development", //这个值有3种：production、development、none
+  // entry: path.join(__dirname, "./src/index"),
+  entry: path.join(__dirname, "./public/app.tsx"), //test
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
     library: "ww-antd-tree",
     libraryTarget: "umd",
     libraryExport: "default", // 不添加的话引用的时候需要 xxx.default
+    sourceMapFilename: "[file].map", // string
     clean: true, // 清除输出目录
     // // 输出类型 (amd, cjs, es, iife, umd, system)：
     //     // iife——最早的模块，jQuery时代流行，封装成一个自执行函数，缺点是污染全局变量，且需手动维护script标签加载顺序
@@ -35,21 +37,21 @@ module.exports = {
   },
   devtool: "source-map",
   // 使自己项目中依赖于宿主项目里的库，不重复打包,比如react，因为引入的肯定是react项目，所以不需要再将react打包进npm包
-  externals: {
-    react: {
-      commonjs: "react",
-      commonjs2: "react",
-      amd: "react",
-      root: "React",
-    },
-    "react-dom": {
-      commonjs: "react-dom",
-      commonjs2: "react-dom",
-      amd: "react-dom",
-      root: "ReactDOM",
-    },
-    lodash: "lodash",
-  },
+  // externals: {
+  //   react: {
+  //     commonjs: "react",
+  //     commonjs2: "react",
+  //     amd: "react",
+  //     root: "React",
+  //   },
+  //   "react-dom": {
+  //     commonjs: "react-dom",
+  //     commonjs2: "react-dom",
+  //     amd: "react-dom",
+  //     root: "ReactDOM",
+  //   },
+  //   lodash: "lodash",
+  // },
   // 原文链接：https://blog.csdn.net/SaRAku/article/details/111555270
   module: {
     rules: [
@@ -60,7 +62,7 @@ module.exports = {
         use: {
           loader: "babel-loader",
           options: {
-            presets: ["@babel/preset-react"],
+            presets: ["@babel/preset-env", "@babel/preset-react"],
           },
         },
       },
@@ -102,7 +104,7 @@ module.exports = {
   },
   plugins: [htmlWebpackPlugin], //插件：自动注入编译打包好的文件
   devServer: {
-    port: 8000, //端口号
+    port: 8001, //端口号
     open: true, // 自动打开浏览器
     compress: true, // 启动gzip压缩
   },

@@ -17,28 +17,29 @@ import classNames from "classnames";
 import "./style.less";
 
 interface CustomTreeProps extends TreeProps {
-  placeholder: string;
-  showIcon: boolean;
-  showLine: boolean;
-  isShowSearch: boolean;
-  loadingTree: boolean;
-  isAutoExpandParent: boolean;
+  placeholder?: string;
+  showIcon?: boolean;
+  showLine?: boolean;
+  isShowSearch?: boolean;
+  loadingTree?: boolean;
+  isAutoExpandParent?: boolean;
   treeSourceData: any;
-  fieldNames: {
+  fieldNames?: {
     key: string;
     title: string;
     children: string;
   };
-  updateTreeSelectVal: (param: string) => void;
-  treeKey: string;
-  expandedKeysFromOutSide: string[];
-  heightFromOutSide: number;
-  selectedKeys: any;
-  actions: {
+  updateTreeSelectVal?: (param: string) => void;
+  treeKey?: string;
+  expandedKeysFromOutSide?: string[];
+  heightFromOutSide?: number;
+  selectedKeys?: any;
+  actions?: {
     add: string;
   };
-  operationItems: (node: any) => React.ReactNode;
-  className: string;
+  operationItems?: (node: any) => React.ReactNode;
+  className?: string;
+  titleRender: (node: any) => React.ReactNode;
 }
 
 const { Search } = Input;
@@ -64,6 +65,7 @@ const WwTree: React.FC<CustomTreeProps> = ({
   actions = { add: "子组织" },
   operationItems,
   className,
+  titleRender,
   ...props
 }) => {
   const [treeData, setTreeData] = useState<any[]>([]); //copy一份树形数据TODO:
@@ -327,9 +329,12 @@ const WwTree: React.FC<CustomTreeProps> = ({
                 orgId: string;
               }
             ) => {
-              return renderTitle(
-                nodeData
-                // treeEditStatusKey === nodeData.orgId
+              return (
+                titleRender(nodeData) ||
+                renderTitle(
+                  nodeData
+                  // treeEditStatusKey === nodeData.orgId
+                )
               );
             }}
             filterTreeNode={(
