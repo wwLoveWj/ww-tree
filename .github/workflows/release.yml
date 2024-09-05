@@ -45,7 +45,7 @@ jobs:
         uses: crazy-max/ghaction-github-pages@v2
         with:
           # 将要部署资产的 GitHub 存储库（默认$GITHUB_REPOSITORY）
-          repo: wwLoveWj/ww-tree,
+          # repo:
           #用户名/仓库名
           # 部署到 gh-pages 分支
           target_branch: gh-pages
