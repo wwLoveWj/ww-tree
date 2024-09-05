@@ -4,7 +4,7 @@ name: CI
 on:
   push:
     branches:
-      - master
+      - main
 # 这是工作流程的主要部分，包含了一个或多个工作（jobs），每个工作都是一系列步骤的组合。
 jobs:
   build:
