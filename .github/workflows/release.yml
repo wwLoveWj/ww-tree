@@ -14,7 +14,7 @@ jobs:
     # 一定要注意！这里一定要是自己项目所使用的node版本，否则在自动打包时会出错。
     strategy:
       matrix:
-        node-version: [14]
+        node-version: [16.x]
     # 这是工作的实际步骤。
     steps:
       # 步骤1 这是步骤的名称，表示将检出（克隆）代码库。
