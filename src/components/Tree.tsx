@@ -308,7 +308,6 @@ const WwTree: React.FC<CustomTreeProps> = ({
       className={classNames("treeBox", className)}
       style={{ height: heightFromOutSide }}
     >
-      666
       <Spin spinning={loadingTree}>
         {isShowSearch && (
           <Search
