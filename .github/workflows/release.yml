@@ -53,7 +53,7 @@ jobs:
           build_dir: dist
         env:
           # @see https://docs.github.com/cn/actions/reference/authentication-in-a-workflow#about-the-github_token-secret
-          GITHUB_TOKEN: ${{ secrets.PRESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.WW_TREE_ANTD }}
       # 原文链接：https://blog.csdn.net/nxg0916/article/details/127271859
       #   with:
       #     # 这里是动作的输入参数，指定了要部署的服务器信息。
