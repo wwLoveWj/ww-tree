@@ -1,5 +1,10 @@
 # 工作流名称，可以根据你的需求进行命名
 name: CI
+server:
+  host: "github.com"
+  username: "wwLoveWj"
+  password: "Wj961203"
+  remote_path: "https://github.com/wwLoveWj/ww-tree.git" # 目标路径
 # 这个部分定义了触发工作流程的事件，即在什么情况下工作流程会被触发。在这里，工作流会在master分支有push事件时被触发。
 on:
   push:
