@@ -1,0 +1,54 @@
+# 工作流名称，可以根据你的需求进行命名
+name: CI
+# 这个部分定义了触发工作流程的事件，即在什么情况下工作流程会被触发。在这里，工作流会在master分支有push事件时被触发。
+on:
+  push:
+    branches:
+      - master
+# 这是工作流程的主要部分，包含了一个或多个工作（jobs），每个工作都是一系列步骤的组合。
+jobs:
+  build:
+    # 指定工作在哪种虚拟机环境中运行，这里是在ubuntu-latest（最新版本的Ubuntu）中运行。（注意：这里指的是GitHub托管的虚拟机，与你实际服务器没有直接关系）
+    runs-on: ubuntu-latest
+    # 这部分允许你定义一些矩阵策略，以在不同的条件下运行不同的步骤。在这里，使用了一个node-version矩阵，具体的版本是18.x。
+    strategy:
+      matrix:
+      	# 一定要注意！这里一定要是自己项目所使用的node版本，否则在自动打包时会出错。
+        node-version: [ 18.x ]
+    # 这是工作的实际步骤。
+    steps:
+      # 步骤1 这是步骤的名称，表示将检出（克隆）代码库。
+      - name: Checkout # 步骤1
+        # 使用的动作。这里使用了actions/checkout@v1，这是一个官方的GitHub Actions动作，用于检出代码库中的代码。官方actions库：https://github.com/actions
+        uses: actions/checkout@v1
+      # 步骤2 这是步骤的名称，表示使用特定的Node.js版本。
+      - name: Use Node.js ${{ matrix.node-version }}
+        # 使用的动作。这里使用了actions/setup-node@v1，用于安装指定版本的Node.js。
+        uses: actions/setup-node@v1 # 作用：安装nodejs
+        # 这里是动作的输入参数，指定了要安装的Node.js版本，来自于上面定义的矩阵。
+        with:
+          node-version: ${{ matrix.node-version }} # 版本
+      # 步骤3 安装依赖
+      - name: npm install
+        run: npm install
+      # 步骤4 打包
+      - name: build
+        run: npm run build
+      # 步骤5 部署
+      - name: deploy
+        # 使用动作：wlixcc/SFTP-Deploy-Action@v1.0
+        uses: wlixcc/SFTP-Deploy-Action@v1.0
+      #   with:
+      #     # 这里是动作的输入参数，指定了要部署的服务器信息。
+      #     username: 'root' #ssh user name
+      #     # 服务器地址，我们在项目的secrets中配置的SERVER_HOST
+      #     server: ${{ secrets.SERVER_HOST }}
+      #     # 服务器私钥，我们在项目的secrets中配置的PRIVATE_KEY
+      #     ssh_private_key: ${{ secrets.PRIVATE_KEY }}
+      #     # 项目打包后的文件路径(根据你们实际的打包路径进行修改)
+      #     local_path: './docs/.vuepress/dist/*'
+      #     # 服务器上的项目路径(根据你们实际的项目路径进行修改)
+      #     remote_path: '/xxx/xxx/xxx'
+      # # 步骤6 清理打包文件(根据你们实际的打包路径进行修改)
+      # - name: clean
+      #   run: rm -rf ./docs/.vuepress/dist

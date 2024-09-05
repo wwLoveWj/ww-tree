@@ -104,8 +104,11 @@ module.exports = {
   },
   plugins: [htmlWebpackPlugin], //插件：自动注入编译打包好的文件
   devServer: {
-    port: 8001, //端口号
+    port: 8080, //端口号
     open: true, // 自动打开浏览器
     compress: true, // 启动gzip压缩
+    client: {
+      progress: true, // 开启进度条
+    },
   },
 };

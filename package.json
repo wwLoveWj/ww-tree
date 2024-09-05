@@ -6,7 +6,7 @@
   "types": "dist/types/Tree.d.ts",
   "scripts": {
     "start": "webpack server --mode development",
-    "build": "webpack --mode development",
+    "build": "webpack --config webpack.config.js --mode production",
     "serve": "nodemon ./public/app.js",
     "postinstall": "patch-package",
     "build:lib": "babel src -d lib",
