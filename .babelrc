@@ -6,6 +6,14 @@
     "@babel/plugin-proposal-object-rest-spread",
     ["@babel/plugin-proposal-decorators", { "legacy": true }],
     "@babel/plugin-proposal-class-properties",
-    "@babel/plugin-transform-classes"
+    "@babel/plugin-transform-classes",
+    [
+      "import",
+      {
+        "libraryName": "antd",
+        "libraryDirectory": "lib", // 这部分在实际使用中可能不需要，除非有特殊的目录结构
+        "style": "css"
+      }
+    ]
   ]
 }
