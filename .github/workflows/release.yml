@@ -71,6 +71,6 @@ jobs:
       #     local_path: './docs/.vuepress/dist/*'
       #     # 服务器上的项目路径(根据你们实际的项目路径进行修改)
       #     remote_path: '/xxx/xxx/xxx'
-      # # 步骤6 清理打包文件(根据你们实际的打包路径进行修改)
-      # - name: clean
-      #   run: rm -rf ./docs/.vuepress/dist
+      # 步骤6 清理打包文件(根据你们实际的打包路径进行修改)
+      - name: clean
+        run: rm -rf ./dist
